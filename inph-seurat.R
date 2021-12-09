@@ -78,3 +78,28 @@ tst_seurat <- RunUMAP(tst_seurat, dims = 1:10)
 DimPlot(tst_seurat, reduction = "umap")
 
 saveRDS(tst_seurat, file = "./inph_tutorial.rds")
+
+### clustering
+
+tst_seurat <- FindNeighbors(tst_seurat, dims = 1:10)
+tst_seurat <- FindClusters(tst_seurat, resolution = 0.5)
+
+# Look at cluster IDs of the first 5 cells
+head(Idents(tst_seurat), 5)
+
+
+###
+
+
+# find all markers of cluster 2
+cluster2.markers <- FindMarkers(tst_seurat, ident.1 = 2, min.pct = 0.25)
+head(cluster2.markers, n = 5)
+
+# find all markers distinguishing cluster 5 from clusters 0 and 3
+cluster5.markers <- FindMarkers(tst_seurat, ident.1 = 5, ident.2 = c(0, 3), min.pct = 0.25)
+head(cluster5.markers, n = 5)
+
+## Useful
+
+# For SingleCellExperiment class
+# https://bioconductor.org/packages/devel/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html
