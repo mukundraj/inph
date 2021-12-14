@@ -79,4 +79,8 @@ cells_list <- wrapped_seurat$create_cells_list()
 cells_json <- jsonlite::toJSON(cells_list)
 write(cells_json, file = "inph_data.json")
 
+#scp mraj@34.136.224.248:/tmp/RtmpFFPrAk/0/0/cells.json /Users/mraj/Desktop/work/data/testportal_data
+#scp mraj@34.136.224.248:/tmp/RtmpFFPrAk/0/0/cell-sets.json /Users/mraj/Desktop/work/data/testportal_data
+#scp mraj@34.136.224.248:/tmp/RtmpFFPrAk/0/0/expression-matrix.json /Users/mraj/Desktop/work/data/testportal_data
+
 ## --- converting seurat to vitessce json ends ---
