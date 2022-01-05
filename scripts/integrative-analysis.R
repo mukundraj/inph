@@ -3,10 +3,65 @@
 
 data=.myReadDataFn_cellClass(exNonMicCells=NULL,argList=.ArgList,convert_to_gene_level=F,returnDataM=F)
 
+# misc commands start
+class(data[[1]][[1]])
+rownames(rowData(data[[1]][[1]]))
+rownames(rowData(data[[1]][[1]]))
+colnames(colData(data[[1]][[1]]))
+# misc commands ends
+
 tmp = unlist(lapply(data$data, function(x) {x$ds_batch[1]}))
 inph_data = data$data[tmp=="human_Tushar_iNPH"]
 tst=.mycBindFn(inputList = inph_data,verbose = T)
+
+# misc commands part2
+
+rowData(tst)
+colData(tst)
+colData(tst)$clusters
+
+colnames(colData(tst))
+table(colData(tst)$ds_batch)
+table(colData(tst)$clusters)
+table(colData(tst)$anno_sex)
+table(colData(tst)$anno_tissue)
+table(colData(tst)$status)
+table(colData(tst)$dataset)
+
+# misc commands part2 ends
+
+
+
 tst_seurat=.extraExport2SeuratFn(tst)
+
+# misc commands part3
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_github("mojaveazure/seurat-disk")
+library(SeuratDisk)
+devtools::install_github('satijalab/seurat-data')
+library(SeuratData)
+InstallData("pbmc3k")
+data("pbmc3k.final")
+pbmc3k.final
+SaveH5Seurat(pbmc3k.final, filename = "pbmc3k.h5Seurat")
+Convert("pbmc3k.h5Seurat", dest = "h5ad")
+
+## python
+# >>> import zarr
+# >>> z2 = zarr.open('my_store.zarr', mode='r')
+# >>> z2.tree()
+# >>> z2["/obs/seurat_clusters"]
+# >>> z2.info
+# >>> z2["/obs/seurat_annotations"].info
+# >>> z2.obs.seurat_clusters
+# >>> z2.obs.seurat_clusters[:5]
+
+
+## SaveH5Seurat(tst_seurat, filename = "tst_seurat.h5Seurat") # currently throwing error
+
+# misc commands part3 ends
 
 
 
