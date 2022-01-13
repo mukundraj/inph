@@ -48,7 +48,12 @@ library(reticulate)
 sceasy::convertFormat(tst_seurat, from="seurat", to="anndata",
                       outFile='output/tmp-anndata.h5ad')
 
+zarr_store_name <- './output/my_store4.zarr'
+
 # Call python script to convert anndata to zarr
-system('python scripts/anndata_to_zarr.py ./output/tmp-anndata.h5ad ./output/my-zarr-store.zarr')
+python_cmd_str <- paste('python scripts/anndata_to_zarr.py ./output/tmp-anndata.h5ad', zarr_store_name)
+system(python_cmd_str)
 
 # Call gsutil function to copy to google bucket
+copy_cmd_str <- paste(paste('gsutil -m cp -r', zarr_store_name), 'gs://ml_portal/testportal_data')
+system(copy_cmd_str)
