@@ -1,6 +1,9 @@
 # Script for converting processing integrated data through Seurat pipeline
 # Load initial function definitions from code_mukund.R
 
+# loading the data .. here Astro.. (faster) / another e.g. Oligo
+.ArgList=.myArgListCreatorFn(cellClass = "Astro")
+
 data=.myReadDataFn_cellClass(exNonMicCells=NULL,argList=.ArgList,convert_to_gene_level=F,returnDataM=F)
 
 # misc commands start
@@ -8,6 +11,9 @@ class(data[[1]][[1]])
 rownames(rowData(data[[1]][[1]]))
 rownames(rowData(data[[1]][[1]]))
 colnames(colData(data[[1]][[1]]))
+pd=colData(data$data[[1]])
+dim(pd)
+head(pd)
 # misc commands ends
 
 tmp = unlist(lapply(data$data, function(x) {x$ds_batch[1]}))
@@ -58,8 +64,28 @@ Convert("pbmc3k.h5Seurat", dest = "h5ad")
 # >>> z2.obs.seurat_clusters
 # >>> z2.obs.seurat_clusters[:5]
 
+#conda install -c conda-forge numcodecs
+#conda install -c conda-forge zarr
+
+#from anndata import read_h5ad
+#import zarr
+
+#adata = read_h5ad('filename.h5ad')
+#adata.write_zarr('my_store3.zarr')
+
+BiocManager::install("LoomExperiment")
+devtools::install_github("cellgeni/sceasy")
+library(sceasy)
+library(reticulate)
+sceasy::convertFormat(pbmc3k.final, from="seurat", to="anndata",
+                      outFile='filename.h5ad')
+sceasy::convertFormat(tst_seurat, from="seurat", to="anndata",
+                      outFile='filename.h5ad')
+
+
 
 ## SaveH5Seurat(tst_seurat, filename = "tst_seurat.h5Seurat") # currently throwing error
+SaveH5Seurat(tst_seurat, filename = "tst_seurat.h5Seurat") # currently throwing error
 
 # misc commands part3 ends
 
@@ -158,3 +184,14 @@ head(cluster5.markers, n = 5)
 
 # For SingleCellExperiment class
 # https://bioconductor.org/packages/devel/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html
+
+
+## misc commands random 
+
+slotNames(pbmc3k.final)
+slotNames(tst_seurat)
+getSlots("Seurat")
+getSlots("Assay")
+tst_seurat@assays$RNA@meta.features
+tst_seurat@assays$RNA@meta.features <- subset (tst_seurat@assays$RNA@meta.features, select = -entrezid)
+## misc commands random ends
