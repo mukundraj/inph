@@ -48,7 +48,7 @@ library(reticulate)
 sceasy::convertFormat(tst_seurat, from="seurat", to="anndata",
                       outFile='output/tmp-anndata.h5ad')
 
-zarr_store_name <- './output/my_store4.zarr'
+zarr_store_name <- './output/my_store3.zarr'
 
 # Call python script to convert anndata to zarr
 python_cmd_str <- paste('python scripts/anndata_to_zarr.py ./output/tmp-anndata.h5ad', zarr_store_name)

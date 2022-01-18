@@ -12,3 +12,9 @@ adata = read_h5ad(arggs[1].strip().strip("'"))
 
 opfile = arggs[2].strip().strip("]").strip("'")
 adata.write_zarr(opfile)
+
+
+# Update the zarr file index
+
+zfile = zarr.open(opfile, mode='r+') # no need to close explicitly - https://zarr.readthedocs.io/en/stable/tutorial.html
+zfile.var._index[:] = zfile.var.gene_id[:]
