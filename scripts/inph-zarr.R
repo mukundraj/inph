@@ -22,11 +22,13 @@ tst_seurat=.extraExport2SeuratFn(tst)
 # Edit Vahid's seurat object to conform to requirement of sceasy library
 tst_seurat@assays$RNA@meta.features <- subset (tst_seurat@assays$RNA@meta.features, select = -entrezid)
 
-# Compute the coordinates and clustering info using Seurat pipeline
+## Compute the coordinates and clustering info using Seurat pipeline
 
-tst_seurat[["percent.mt"]] <- PercentageFeatureSet(tst_seurat, pattern = "^MT-")
+# QC check based on a metric (skip if no QC needed)
+# tst_seurat[["percent.mt"]] <- PercentageFeatureSet(tst_seurat, pattern = "^MT-")
 
-tst_seurat <- subset(tst_seurat, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
+# subset step (skip if no QC needed)
+# tst_seurat <- subset(tst_seurat, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
 
 tst_seurat <- NormalizeData(tst_seurat)
 tst_seurat <- FindVariableFeatures(tst_seurat, selection.method = "vst", nfeatures = 2000)
@@ -48,7 +50,7 @@ library(reticulate)
 sceasy::convertFormat(tst_seurat, from="seurat", to="anndata",
                       outFile='output/tmp-anndata.h5ad')
 
-zarr_store_name <- './output/my_store3.zarr'
+zarr_store_name <- './output/my_store_inph_astro.zarr'
 
 # Call python script to convert anndata to zarr
 python_cmd_str <- paste('python scripts/anndata_to_zarr.py ./output/tmp-anndata.h5ad', zarr_store_name)
